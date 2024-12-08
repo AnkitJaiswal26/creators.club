@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useOkto } from "okto-sdk-react";
 import styled from "styled-components";
-import logo from "../../images/logo.svg";
+import logo from "../../images/tribesvg.svg";
 import headerbg from "../../images/headerbg.png";
 import googleLogo from "../../images/googleLogo.png";
 import orDividerImg from "../../images/orDivider.svg";
@@ -15,7 +15,6 @@ import {
   useAnonAadhaar,
   useProver,
 } from "@anon-aadhaar/react";
-import { useCrowdFundingContext } from "../../contexts/ContentContext";
 // import
 
 const SignUpPageContainer = styled.div`
@@ -37,8 +36,7 @@ const SignUpHeroSection = styled.div`
 `;
 
 const SignUpAppLogo = styled.img`
-  height: 4rem;
-  margin-bottom: 2rem;
+  height: 13rem;
 `;
 
 const SubHeaderSpan = styled.span`
@@ -191,19 +189,33 @@ const SignUpPage = ({ setAuthToken, authToken, handleLogout }) => {
 
   const googleLoginHandler = async (e) => {
     e.preventDefault();
+    // const idToken = await state.magic.oauth.loginWithRedirect({
+    //     provider: "google",
+    //     redirectURI: `${process.env.REACT_APP_URL}/redirect?link=/home`,
+    // });
+    // console.log(idToken);
   };
 
   const handleVerifyAnon = useCallback((e) => {}, []);
 
-  const {registerUser} = useCrowdFundingContext();
-
-  const handleCreateAccount = useCallback(async (e) => {
+  const handleCreateAccount = useCallback((e) => {
+    if (latestProof) {
       const ageAbove18 = latestProof.claim.ageAbove18;
       const gender = latestProof.claim.gender;
       const signalHash = latestProof.signalHash;
-      const details = await getUserDetails();
-      
+      console.log(
+        "ageAbove18 ",
+        ageAbove18,
+        "gender ",
+        gender,
+        "singalHash ",
+        signalHash
+      );
+      // TODO: Make call to smart contract to create the account.
       onSignUpSuccessMetamask();
+    } else {
+      alert("Profile not verified!");
+    }
   }, []);
 
   const onSignUpSuccessMetamask = () => {
